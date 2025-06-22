@@ -1,0 +1,9 @@
+path: /root/catkin_ws/src/my_scripts/assignment_2/train_yolo/dataset_blocks_statics/dataset
+train: train/images
+val: val/images
+names:
+  0: cube_1
+  1: cube_2
+  2: cube_3
+  3: cube_4
+  4: cube_5
