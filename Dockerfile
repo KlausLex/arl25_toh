@@ -37,7 +37,8 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Fix Error "Invoking "make -j12 -l12" failed"
-RUN apt-get update && apt-get install -y libsdl1.2-dev && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y libsdl1.2-dev && \
+    rm -rf /var/lib/apt/lists/*
 
 # Set up NVIDIA drivers
 RUN apt-get update && apt-get install -y \
@@ -148,12 +149,14 @@ RUN cd /root/catkin_ws/src/my_scripts/assignment_2 && \
 
 # Fix: Source ROS setup before building
 WORKDIR /root/catkin_ws
-RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && \
-    catkin_make -DCMAKE_VERBOSE_MAKEFILE=ON"
 
 # Install any missing dependencies
-RUN apt-get update && rosdep install --from-paths src --ignore-src -y || true
+RUN apt-get update && \
+    rosdep install --from-paths src --ignore-src -r -y
 
+# Build workspace
+RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && \
+    catkin_make -DCMAKE_VERBOSE_MAKEFILE=ON"
 
 # Add user for accessing USB devices
 RUN groupadd -r docker && usermod -aG docker root
