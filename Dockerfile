@@ -154,6 +154,10 @@ WORKDIR /root/catkin_ws
 RUN apt-get update && \
     rosdep install --from-paths src --ignore-src -r -y
 
+# Install requirements.txt
+COPY requirements.txt /tmp/requirements.txt
+RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
+
 # Build workspace
 RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && \
     catkin_make -DCMAKE_VERBOSE_MAKEFILE=ON"
