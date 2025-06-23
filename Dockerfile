@@ -88,6 +88,7 @@ RUN apt-get update && apt-get install -y \
 # Install additional ROS packages for OpenMANIPULATOR-X (without joystick-drivers)
 RUN apt-get update && apt-get install -y \
     ros-noetic-moveit \
+    ros-noetic-moveit-ros-perception \
     ros-noetic-industrial-core \
     ros-noetic-dynamixel-sdk \
     ros-noetic-dynamixel-workbench \
