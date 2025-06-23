@@ -106,6 +106,10 @@ RUN apt-get update && apt-get install -y \
 RUN apt-get update && apt-get install -y ros-noetic-moveit-visual-tools    
 RUN apt-get update && apt-get install -y python3-pip
 
+# Install requirements.txt
+COPY requirements.txt /tmp/requirements.txt
+RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
+
 # Setup ROS workspace and clone noetic packages
 RUN mkdir -p /root/catkin_ws/src && \
     cd /root/catkin_ws/src && \
