@@ -33,6 +33,9 @@ RUN apt-get update && apt-get install -y \
     git \
     && rm -rf /var/lib/apt/lists/*
 
+# Fix Error "Invoking "make -j12 -l12" failed"
+RUN apt-get update && apt-get install -y libsdl1.2-dev && rm -rf /var/lib/apt/lists/*
+
 # Set up NVIDIA drivers
 RUN apt-get update && apt-get install -y \
     libglvnd0 \
