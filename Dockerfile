@@ -4,6 +4,9 @@ FROM ubuntu:20.04
 # Set up the environment to prevent interactive prompts
 ENV DEBIAN_FRONTEND=noninteractive
 
+# Set CXXFLAGS to disable treating warnings as errors
+ENV CXXFLAGS="${CXXFLAGS} -Wno-error"
+
 # Update the package list and install essential packages
 RUN apt-get update && apt-get install -y \
     python3-pip \
@@ -156,8 +159,8 @@ RUN groupadd -r docker && usermod -aG docker root
 # Try building everything except problematic packages
 RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && \
     source /root/catkin_ws/devel/setup.bash && \
-    catkin_make -DCATKIN_BLACKLIST_PACKAGES=\"open_manipulator_6dof_teleop;joystick_drivers\""
-
+    catkin_make"
+    
 # Set up environment for running GUI applications
 ENV QT_X11_NO_MITSHM=1
 ENV DISPLAY=:0
