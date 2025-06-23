@@ -87,6 +87,7 @@ RUN apt-get update && apt-get install -y \
 
 # Install additional ROS packages for OpenMANIPULATOR-X (without joystick-drivers)
 RUN apt-get update && apt-get install -y \
+    ros-noetic-moveit \
     ros-noetic-industrial-core \
     ros-noetic-dynamixel-sdk \
     ros-noetic-dynamixel-workbench \
@@ -97,6 +98,7 @@ RUN apt-get update && apt-get install -y \
     ros-noetic-controller-interface \
     ros-noetic-controller-manager \
     ros-noetic-joint-state-controller \
+    ros-noetic-moveit-visual-tools \
     libboost-dev \
     libeigen3-dev \
     libtinyxml-dev \
@@ -171,9 +173,9 @@ RUN ./libuvc_installation.sh
 
 RUN apt-get install -y ros-noetic-realsense2-camera
 
-# Install requirements.txt
-COPY requirements.txt /tmp/requirements.txt
-RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
+# # Install requirements.txt
+# COPY requirements.txt /tmp/requirements.txt
+# RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
 
 # Source the ROS environment by default
 RUN echo "source /opt/ros/noetic/setup.bash" >> /root/.bashrc
