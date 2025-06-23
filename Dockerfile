@@ -121,7 +121,8 @@ RUN mkdir -p /root/catkin_ws/src && \
 # COPY requirements /root/catkin_ws/src/recordings
 
 # Add scripts and recording files
-RUN git clone https://github.com/KlausLex/arl25_toh.git && \
+RUN cd /root/catkin_ws/src && \
+    git clone https://github.com/KlausLex/arl25_toh.git && \
     cp -r arl25_toh/* . && \
     rm -rf arl25_toh
 

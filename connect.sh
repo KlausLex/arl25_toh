@@ -1,2 +1,2 @@
 #!/bin/bash
-docker exec -it alr25_toh_container bash
+docker exec -it arl25_toh_container bash
