@@ -148,7 +148,6 @@ RUN cd /root/catkin_ws/src/my_scripts/assignment_2 && \
 # Fix: Source ROS setup before building
 WORKDIR /root/catkin_ws
 RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && \
-    source /root/catkin_ws/devel/setup.bash && \
     catkin_make -DCMAKE_VERBOSE_MAKEFILE=ON"
 
 # Install any missing dependencies
