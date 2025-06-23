@@ -123,6 +123,7 @@ RUN mkdir -p /root/catkin_ws/src && \
 # Add scripts and recording files
 RUN cd /root/catkin_ws/src && \
     git clone https://github.com/KlausLex/arl25_toh.git && \
+    RUN git submodule update --init --recursive && \
     cp -r arl25_toh/* . && \
     rm -rf arl25_toh
 
