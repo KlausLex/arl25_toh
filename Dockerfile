@@ -117,6 +117,9 @@ RUN mkdir -p /root/catkin_ws/src && \
     cp -r ARL_25_noetic_packages/* . && \
     rm -rf ARL_25_noetic_packages
 
+# Copy recording dir
+# COPY requirements /root/catkin_ws/src/recordings
+
 # Add scripts and recording files
 RUN git clone https://github.com/KlausLex/arl25_toh.git && \
     cp -r arl25_toh/* . && \
