@@ -108,9 +108,9 @@ RUN apt-get update && apt-get install -y \
 # RUN apt-get update && apt-get install -y ros-noetic-moveit-visual-tools    
 # RUN apt-get update && apt-get install -y python3-pip
 
-# Install requirements.txt
-COPY requirements.txt /tmp/requirements.txt
-RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
+# # Install requirements.txt
+# COPY requirements.txt /tmp/requirements.txt
+# RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
 
 # Setup ROS workspace and clone noetic packages
 RUN mkdir -p /root/catkin_ws/src && \
@@ -165,6 +165,10 @@ RUN chmod +x ./libuvc_installation.sh
 RUN ./libuvc_installation.sh
 
 RUN apt-get install -y ros-noetic-realsense2-camera
+
+# Install requirements.txt
+COPY requirements.txt /tmp/requirements.txt
+RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
 
 # Source the ROS environment by default
 RUN echo "source /opt/ros/noetic/setup.bash" >> /root/.bashrc
