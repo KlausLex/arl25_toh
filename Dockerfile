@@ -6,6 +6,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Update the package list and install essential packages
 RUN apt-get update && apt-get install -y \
+    python3-pip \
     lsb-release \
     gnupg2 \
     curl \
@@ -71,7 +72,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Initialize rosdep
-RUN rosdep init && rosdep update
+RUN rosdep init || true && rosdep update
 
 # Install Gazebo 11
 RUN apt-get update && apt-get install -y \
@@ -91,6 +92,7 @@ RUN apt-get update && apt-get install -y \
     ros-noetic-controller-interface \
     ros-noetic-controller-manager \
     ros-noetic-joint-state-controller \
+    ros-noetic-moveit-visual-tools \
     libboost-dev \
     libeigen3-dev \
     libtinyxml-dev \
@@ -103,8 +105,8 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Setup ROS workspace
-RUN apt-get update && apt-get install -y ros-noetic-moveit-visual-tools    
-RUN apt-get update && apt-get install -y python3-pip
+# RUN apt-get update && apt-get install -y ros-noetic-moveit-visual-tools    
+# RUN apt-get update && apt-get install -y python3-pip
 
 # Install requirements.txt
 COPY requirements.txt /tmp/requirements.txt
