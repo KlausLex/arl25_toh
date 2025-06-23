@@ -147,7 +147,9 @@ RUN cd /root/catkin_ws/src/my_scripts/assignment_2 && \
 
 # Fix: Source ROS setup before building
 WORKDIR /root/catkin_ws
-RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && catkin_make -DCMAKE_VERBOSE_MAKEFILE=ON"
+RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && \
+    source /root/catkin_ws/devel/setup.bash && \
+    catkin_make -DCMAKE_VERBOSE_MAKEFILE=ON"
 
 # Install any missing dependencies
 RUN apt-get update && rosdep install --from-paths src --ignore-src -y || true
@@ -156,10 +158,10 @@ RUN apt-get update && rosdep install --from-paths src --ignore-src -y || true
 # Add user for accessing USB devices
 RUN groupadd -r docker && usermod -aG docker root
 
-# Try building everything except problematic packages
-RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && \
-    source /root/catkin_ws/devel/setup.bash && \
-    catkin_make"
+# # Try building everything except problematic packages
+# RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && \
+#     source /root/catkin_ws/devel/setup.bash && \
+#     catkin_make"
 
 # Set up environment for running GUI applications
 ENV QT_X11_NO_MITSHM=1
