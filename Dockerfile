@@ -114,6 +114,7 @@ RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
 RUN mkdir -p /root/catkin_ws/src && \
     cd /root/catkin_ws/src && \
     git clone https://github.com/KlausLex/ARL_25_noetic_packages.git && \
+    git submodule update --init --recursive && \
     cp -r ARL_25_noetic_packages/* . && \
     rm -rf ARL_25_noetic_packages
 
@@ -123,7 +124,6 @@ RUN mkdir -p /root/catkin_ws/src && \
 # Add scripts and recording files
 RUN cd /root/catkin_ws/src && \
     git clone https://github.com/KlausLex/arl25_toh.git && \
-    git submodule update --init --recursive && \
     cp -r arl25_toh/* . && \
     rm -rf arl25_toh
 
