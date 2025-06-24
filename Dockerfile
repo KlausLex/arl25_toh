@@ -127,7 +127,7 @@ RUN apt-get update && apt-get install -y \
 
 # Setup ROS workspace and clone ${ROS_DISTRO} packages
 RUN cd ${ROS_WS}/src && \
-    git clone https://github.com/shailjadav/ARL_25_noetic_packages.git && \
+    git clone https://github.com/KlausLex/ARL_25_noetic_packages.git && \
     cd ARL_25_noetic_packages && \
     git submodule update --init --recursive && \
     cd .. && \
@@ -142,6 +142,8 @@ RUN cd ${ROS_WS}/src && \
 RUN cd ${ROS_WS}/src && \
     git clone https://github.com/KlausLex/arl25_toh.git && \
     cp -r arl25_toh/* . && \
+    cp arl25_toh/my_scripts/toh_solver/toh_setup.launch om_position_controller/launch/ && \
+    cp arl25_toh/my_scripts/toh_solver/* my_scripts/assignment_3/Docker_volume/ && \
     rm -rf arl25_toh
 
 # Add YOLO and SAM2 models to the assignment 2 directory
