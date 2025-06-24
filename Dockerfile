@@ -138,13 +138,6 @@ RUN cd ${ROS_WS}/src && \
 # This ensures a clean slate before copying the known-working version.
 RUN rm -rf ${ROS_WS}/src/ar_track_alvar
 
-# Clone the known-working ar_track_alvar from shailjadav's repo
-# This will now ensure the working version is used by completely replacing any prior version.
-RUN cd ${ROS_WS}/src && \
-    git clone https://github.com/shailjadav/ARL_25_noetic_packages.git /tmp/shailjadav_ARL_25_noetic_packages && \
-    cp -r /tmp/shailjadav_ARL_25_noetic_packages/ar_track_alvar . && \
-    rm -rf /tmp/shailjadav_ARL_25_noetic_packages
-
 # Explicitly remove the potentially problematic open_manipulator_6dof_controls from the original clone
 # It's likely nested within the 'open_manipulator' submodule from KlausLex's repo.
 RUN rm -rf ${ROS_WS}/src/open_manipulator/open_manipulator_6dof_controls
