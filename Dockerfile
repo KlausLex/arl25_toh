@@ -81,7 +81,7 @@ RUN apt-get update && apt-get install -y \
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /root/.bashrc
 
 # Setup rosdep
-RUN apt-get upate && apt-get install -y \
+RUN apt-get update && apt-get install -y \
     python3-rosdep \
     python3-rosinstall \
     python3-rosinstall-generator \
