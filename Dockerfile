@@ -1,44 +1,51 @@
 # Use Ubuntu 20.04 as the base image
 FROM ubuntu:20.04
 
-# Set up the environment to prevent interactive prompts
-ENV DEBIAN_FRONTEND=noninteractive
+ARG ROS_DISTRO=noetic
 
-# Set CXXFLAGS to disable treating warnings as errors
-ENV CXXFLAGS="${CXXFLAGS} -Wno-error"
+# Set up the environment to prevent interactive prompts
+ENV DEBIAN_FRONTEND=noninteractive \
+    LANG=C.UTF-8 \
+    LC_ALL=C.UTF-8
+
+ENV ROS_WS /root/catkin_ws
+RUN mkdir -p ${ROS_WS}/src 
 
 # Update the package list and install essential packages
 RUN apt-get update && apt-get install -y \
-    python3-pip \
-    lsb-release \
-    gnupg2 \
-    curl \
-    wget \
+    build-essential \
     ca-certificates \
+    cmake \
+    curl \
+    git \
+    gnupg2 \
     libgl1-mesa-glx \
     libgl1-mesa-dri \
+    libusb-1.0-0-dev \
     libx11-dev \
+    libxau-dev \
+    libxcb1-dev \
+    libxdmcp-dev \
+    libxext-dev \
     libxrender-dev \
     libxrandr-dev \
-    build-essential \
+    lsb-release \
+    mesa-utils \
+    python3-catkin-tools \
+    pkg-config \
+    python3-pip \
+    python3-wstool \
     udev \
     usbutils \
-    libusb-1.0-0-dev \
-    xserver-xorg \
+    wget \
     x11-xserver-utils \
     x11-utils \
-    mesa-utils \
-    pkg-config \
-    libxau-dev \
-    libxdmcp-dev \
-    libxcb1-dev \
-    libxext-dev \
-    git \
+    xserver-xorg \
     && rm -rf /var/lib/apt/lists/*
 
-# Fix Error "Invoking "make -j12 -l12" failed"
-RUN apt-get update && apt-get install -y libsdl1.2-dev && \
-    rm -rf /var/lib/apt/lists/*
+# # Fix Error "Invoking "make -j12 -l12" failed"
+# RUN apt-get update && apt-get install -y libsdl1.2-dev && \
+#     rm -rf /var/lib/apt/lists/*
 
 # Set up NVIDIA drivers
 RUN apt-get update && apt-get install -y \
@@ -57,50 +64,58 @@ RUN echo '{"file_format_version" : "1.0.0", "ICD" : {"library_path" : "libEGL_nv
 ENV NVIDIA_VISIBLE_DEVICES ${NVIDIA_VISIBLE_DEVICES:-all}
 ENV NVIDIA_DRIVER_CAPABILITIES ${NVIDIA_DRIVER_CAPABILITIES:+$NVIDIA_DRIVER_CAPABILITIES,}graphics
 
-# Install ROS Noetic
-RUN apt-get update && apt-get install -y curl gnupg2 lsb-release
-RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add -
-RUN echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list
+# Setip ROS Install
+RUN apt-get update && apt-get install -y && \
+    curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add - && \
+    echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list
+
+# Install ROS ${ROS_DISTRO}
 RUN apt-get update && apt-get install -y \
-    ros-noetic-desktop-full \
+    ros-${ROS_DISTRO}-desktop-full \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Python tools and additional ROS packages
-RUN apt-get update && apt-get install -y \
+# Source workspace
+RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /root/.bashrc
+
+# Setup rosdep
+RUN apt-get upate && apt-get install -y \
     python3-rosdep \
     python3-rosinstall \
     python3-rosinstall-generator \
-    python3-wstool \
-    python3-catkin-tools \
-    ros-noetic-gazebo-ros-pkgs \
-    ros-noetic-gazebo-ros-control \
-    ros-noetic-rviz \
-    ros-noetic-ros-controllers \
     && rm -rf /var/lib/apt/lists/*
 
 # Initialize rosdep
-RUN rosdep init || true && rosdep update
-
-# Install Gazebo 11
+RUN rosdep init && \
+    rosdep update --rosdistro ${ROS_DISTRO}
+    
+# Install Python tools and additional ROS packages
 RUN apt-get update && apt-get install -y \
-    gazebo11 \
+    ros-${ROS_DISTRO}-gazebo-ros-pkgs \
+    ros-${ROS_DISTRO}-gazebo-ros-control \
+    ros-${ROS_DISTRO}-rviz \
+    ros-${ROS_DISTRO}-ros-controllers \
     && rm -rf /var/lib/apt/lists/*
+
+# # Install Gazebo 11
+# RUN apt-get update && apt-get install -y \
+#     gazebo11 \
+#     && rm -rf /var/lib/apt/lists/*
 
 # Install additional ROS packages for OpenMANIPULATOR-X (without joystick-drivers)
 RUN apt-get update && apt-get install -y \
-    ros-noetic-moveit \
-    ros-noetic-moveit-ros-perception \
-    ros-noetic-industrial-core \
-    ros-noetic-dynamixel-sdk \
-    ros-noetic-dynamixel-workbench \
-    ros-noetic-robotis-manipulator \
-    ros-noetic-pcl-ros \
-    ros-noetic-joy \
-    ros-noetic-control-toolbox \
-    ros-noetic-controller-interface \
-    ros-noetic-controller-manager \
-    ros-noetic-joint-state-controller \
-    ros-noetic-moveit-visual-tools \
+    ros-${ROS_DISTRO}-moveit \
+    ros-${ROS_DISTRO}-moveit-ros-perception \
+    ros-${ROS_DISTRO}-industrial-core \
+    ros-${ROS_DISTRO}-dynamixel-sdk \
+    ros-${ROS_DISTRO}-dynamixel-workbench \
+    ros-${ROS_DISTRO}-robotis-manipulator \
+    ros-${ROS_DISTRO}-pcl-ros \
+    ros-${ROS_DISTRO}-joy \
+    ros-${ROS_DISTRO}-control-toolbox \
+    ros-${ROS_DISTRO}-controller-interface \
+    ros-${ROS_DISTRO}-controller-manager \
+    ros-${ROS_DISTRO}-joint-state-controller \
+    ros-${ROS_DISTRO}-moveit-visual-tools \
     libboost-dev \
     libeigen3-dev \
     libtinyxml-dev \
@@ -112,17 +127,12 @@ RUN apt-get update && apt-get install -y \
     usb-modeswitch \
     && rm -rf /var/lib/apt/lists/*
 
-# Setup ROS workspace
-# RUN apt-get update && apt-get install -y ros-noetic-moveit-visual-tools    
-# RUN apt-get update && apt-get install -y python3-pip
-
 # # Install requirements.txt
 # COPY requirements.txt /tmp/requirements.txt
 # RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
 
-# Setup ROS workspace and clone noetic packages
-RUN mkdir -p /root/catkin_ws/src && \
-    cd /root/catkin_ws/src && \
+# Setup ROS workspace and clone ${ROS_DISTRO} packages
+RUN cd ${ROS_WS}/src && \
     git clone https://github.com/KlausLex/ARL_25_noetic_packages.git && \
     cd ARL_25_noetic_packages && \
     git submodule update --init --recursive && \
@@ -131,16 +141,16 @@ RUN mkdir -p /root/catkin_ws/src && \
     rm -rf ARL_25_noetic_packages
 
 # Copy recording dir
-# COPY requirements /root/catkin_ws/src/recordings
+# COPY requirements ${ROS_WS}/src/recordings
 
 # Add scripts and recording files
-RUN cd /root/catkin_ws/src && \
+RUN cd ${ROS2_WS}/src && \
     git clone https://github.com/KlausLex/arl25_toh.git && \
     cp -r arl25_toh/* . && \
     rm -rf arl25_toh
 
 # Add YOLO and SAM2 models to the assignment 2 directory
-RUN cd /root/catkin_ws/src/my_scripts/assignment_2 && \
+RUN cd ${ROS_WS}/src/my_scripts/assignment_2 && \
     curl -L -o yolo11m.pt https://github.com/ultralytics/assets/releases/download/v8.3.0/yolo11m.pt && \
     curl -L -o yolo11n.pt https://github.com/ultralytics/assets/releases/download/v8.3.0/yolo11n.pt && \
     curl -L -o yolov8n.pt https://github.com/ultralytics/assets/releases/download/v8.3.0/yolov8n.pt && \
@@ -148,7 +158,7 @@ RUN cd /root/catkin_ws/src/my_scripts/assignment_2 && \
     curl -L -o sam2_b.pt https://github.com/ultralytics/assets/releases/download/v8.3.0/sam2_b.pt
 
 # Fix: Source ROS setup before building
-WORKDIR /root/catkin_ws
+WORKDIR ${ROS_WS}
 
 # Install any missing dependencies
 RUN apt-get update && \
@@ -159,7 +169,7 @@ COPY requirements.txt /tmp/requirements.txt
 RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
 
 # Build workspace
-RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && \
+RUN /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash && \
     catkin_make -DCMAKE_VERBOSE_MAKEFILE=ON"
 
 # Add user for accessing USB devices
@@ -179,14 +189,14 @@ RUN wget https://github.com/IntelRealSense/librealsense/raw/master/scripts/libuv
 RUN chmod +x ./libuvc_installation.sh
 RUN ./libuvc_installation.sh
 
-RUN apt-get install -y ros-noetic-realsense2-camera
+RUN apt-get install -y ros-${ROS_DISTRO}-realsense2-camera
 
 # # Install requirements.txt
 # COPY requirements.txt /tmp/requirements.txt
 # RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
 
 # Source the ROS environment by default
-RUN echo "source /opt/ros/noetic/setup.bash" >> /root/.bashrc
+RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /root/.bashrc
 RUN echo "source /root/catkin_ws/devel/setup.bash" >> /root/.bashrc
 
 
