@@ -130,9 +130,9 @@ RUN cd ${ROS_WS}/src && \
     git clone https://github.com/KlausLex/ARL_25_noetic_packages.git && \
     cd ARL_25_noetic_packages && \
     git submodule update --init --recursive && \
-    cd ".. && \
+    cd .. && \
     cp -r ARL_25_noetic_packages/* . && \
-    rm -rf ARL_25_noetic_packages"
+    rm -rf ARL_25_noetic_packages
 
 # Explicitly remove the ar_track_alvar directory that might have come from KlausLex's repo
 # This ensures a clean slate before copying the known-working version.
@@ -145,7 +145,6 @@ RUN cd ${ROS_WS}/src && \
     cp -r /tmp/shailjadav_ARL_25_noetic_packages/ar_track_alvar . && \
     rm -rf /tmp/shailjadav_ARL_25_noetic_packages
 
-# --- START OF MODIFICATION ---
 # Explicitly remove the potentially problematic open_manipulator_controllers before replacing it
 RUN rm -rf ${ROS_WS}/src/open_manipulator_controllers
 
@@ -154,7 +153,6 @@ RUN cd ${ROS_WS}/src && \
     git clone https://github.com/shailjadav/ARL_25_noetic_packages.git /tmp/shailjadav_ARL_25_noetic_packages_open_manipulator_controllers && \
     cp -r /tmp/shailjadav_ARL_25_noetic_packages_open_manipulator_controllers/open_manipulator_controllers . && \
     rm -rf /tmp/shailjadav_ARL_25_noetic_packages_open_manipulator_controllers
-# --- END OF MODIFICATION ---
 
 # Add scripts and recording files
 RUN cd ${ROS_WS}/src && \
