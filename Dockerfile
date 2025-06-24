@@ -147,7 +147,7 @@ RUN cd ${ROS_WS}/src && \
 # COPY requirements ${ROS_WS}/src/recordings
 
 # Add scripts and recording files
-RUN cd ${ROS2_WS}/src && \
+RUN cd ${ROS_WS}/src && \
     git clone https://github.com/KlausLex/arl25_toh.git && \
     cp -r arl25_toh/* . && \
     rm -rf arl25_toh
