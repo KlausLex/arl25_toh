@@ -31,8 +31,8 @@ RUN apt-get update && apt-get install -y \
     libxrandr-dev \
     lsb-release \
     mesa-utils \
-    python3-catkin-tools \
     pkg-config \
+    python3-osrf-pycommon python3-catkin-tools \
     python3-pip \
     python3-wstool \
     udev \
