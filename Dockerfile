@@ -32,7 +32,6 @@ RUN apt-get update && apt-get install -y \
     lsb-release \
     mesa-utils \
     pkg-config \
-    python3-osrf-pycommon python3-catkin-tools \
     python3-pip \
     python3-wstool \
     udev \
@@ -47,7 +46,7 @@ RUN apt-get update && apt-get install -y \
 # RUN apt-get update && apt-get install -y libsdl1.2-dev && \
 #     rm -rf /var/lib/apt/lists/*
 
-# Set up NVIDIA drivers
+# Set up NVIDIA driversccc
 RUN apt-get update && apt-get install -y \
     libglvnd0 \
     libgl1 \
@@ -64,10 +63,14 @@ RUN echo '{"file_format_version" : "1.0.0", "ICD" : {"library_path" : "libEGL_nv
 ENV NVIDIA_VISIBLE_DEVICES ${NVIDIA_VISIBLE_DEVICES:-all}
 ENV NVIDIA_DRIVER_CAPABILITIES ${NVIDIA_DRIVER_CAPABILITIES:+$NVIDIA_DRIVER_CAPABILITIES,}graphics
 
-# Setip ROS Install
+# Setup ROS Install
 RUN apt-get update && apt-get install -y && \
     curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add - && \
-    echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list
+    echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list \
+    python3-osrf-pycommon \
+    python3-catkin-tools \
+    && rm -rf /var/lib/apt/lists/*
+
 
 # Install ROS ${ROS_DISTRO}
 RUN apt-get update && apt-get install -y \
