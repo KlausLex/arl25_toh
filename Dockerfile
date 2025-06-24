@@ -127,7 +127,7 @@ RUN apt-get update && apt-get install -y \
 
 # Setup ROS workspace and clone ${ROS_DISTRO} packages
 RUN cd ${ROS_WS}/src && \
-    git clone https://github.com/KlausLex/ARL_25_noetic_packages.git && \
+    git clone https://github.com/shailjadav/ARL_25_noetic_packages.git && \
     cd ARL_25_noetic_packages && \
     git submodule update --init --recursive && \
     cd .. && \
@@ -136,17 +136,7 @@ RUN cd ${ROS_WS}/src && \
 
 # Explicitly remove the ar_track_alvar directory that might have come from KlausLex's repo
 # This ensures a clean slate before copying the known-working version.
-RUN rm -rf ${ROS_WS}/src/ar_track_alvar
-
-# Explicitly remove the potentially problematic open_manipulator_6dof_controls from the original clone
-# It's likely nested within the 'open_manipulator' submodule from KlausLex's repo.
-RUN rm -rf ${ROS_WS}/src/open_manipulator/open_manipulator_6dof_controls
-
-# Clone the shailjadav repo and copy the specific package
-RUN cd ${ROS_WS}/src && \
-    git clone https://github.com/shailjadav/ARL_25_noetic_packages.git /tmp/shailjadav_ARL_25_noetic_packages_for_6dof && \
-    cp -r /tmp/shailjadav_ARL_25_noetic_packages_for_6dof/open_manipulator_6dof_controls . && \
-    rm -rf /tmp/shailjadav_ARL_25_noetic_packages_for_6dof
+# RUN rm -rf ${ROS_WS}/src/ar_track_alvar
 
 # Add scripts and recording files
 RUN cd ${ROS_WS}/src && \
