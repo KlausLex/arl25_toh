@@ -168,8 +168,7 @@ COPY requirements.txt /tmp/requirements.txt
 RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
 
 # Build workspace
-RUN /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash && \
-    catkin_make -DCMAKE_VERBOSE_MAKEFILE=ON"
+RUN /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash && catkin_make"
 
 # Add user for accessing USB devices
 RUN groupadd -r docker && usermod -aG docker root
