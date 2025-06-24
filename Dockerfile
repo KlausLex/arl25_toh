@@ -134,10 +134,6 @@ RUN cd ${ROS_WS}/src && \
     cp -r ARL_25_noetic_packages/* . && \
     rm -rf ARL_25_noetic_packages
 
-# Explicitly remove the ar_track_alvar directory that might have come from KlausLex's repo
-# This ensures a clean slate before copying the known-working version.
-# RUN rm -rf ${ROS_WS}/src/ar_track_alvar
-
 # Add scripts and recording files
 RUN cd ${ROS_WS}/src && \
     git clone https://github.com/KlausLex/arl25_toh.git && \
