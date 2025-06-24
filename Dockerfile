@@ -42,11 +42,7 @@ RUN apt-get update && apt-get install -y \
     xserver-xorg \
     && rm -rf /var/lib/apt/lists/*
 
-# # Fix Error "Invoking "make -j12 -l12" failed"
-# RUN apt-get update && apt-get install -y libsdl1.2-dev && \
-#     rm -rf /var/lib/apt/lists/*
-
-# Set up NVIDIA driversccc
+# Set up NVIDIA drivers
 RUN apt-get update && apt-get install -y \
     libglvnd0 \
     libgl1 \
@@ -99,11 +95,6 @@ RUN apt-get update && apt-get install -y \
     ros-${ROS_DISTRO}-ros-controllers \
     && rm -rf /var/lib/apt/lists/*
 
-# # Install Gazebo 11
-# RUN apt-get update && apt-get install -y \
-#     gazebo11 \
-#     && rm -rf /var/lib/apt/lists/*
-
 # Install additional ROS packages for OpenMANIPULATOR-X (without joystick-drivers)
 RUN apt-get update && apt-get install -y \
     ros-${ROS_DISTRO}-moveit \
@@ -123,16 +114,15 @@ RUN apt-get update && apt-get install -y \
     libeigen3-dev \
     libtinyxml-dev \
     libpcl-dev \
+    ros-${ROS_DISTRO}-cv-bridge \
+    ros-${ROS_DISTRO}-image-transport \
+    ros-${ROS_DISTRO}-resource-retriever \
     && rm -rf /var/lib/apt/lists/*
 
 # Install dependencies for USB device access
 RUN apt-get update && apt-get install -y \
     usb-modeswitch \
     && rm -rf /var/lib/apt/lists/*
-
-# # Install requirements.txt
-# COPY requirements.txt /tmp/requirements.txt
-# RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
 
 # Setup ROS workspace and clone ${ROS_DISTRO} packages
 RUN cd ${ROS_WS}/src && \
@@ -143,8 +133,9 @@ RUN cd ${ROS_WS}/src && \
     cp -r ARL_25_noetic_packages/* . && \
     rm -rf ARL_25_noetic_packages
 
-# Copy recording dir
-# COPY requirements ${ROS_WS}/src/recordings
+# Clone the compatible ar_track_alvar fork after other packages
+RUN cd ${ROS_WS}/src && \
+    git clone https://github.com/machinekoder/ar_track_alvar.git -b noetic-devel
 
 # Add scripts and recording files
 RUN cd ${ROS_WS}/src && \
@@ -178,11 +169,6 @@ RUN /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash && \
 # Add user for accessing USB devices
 RUN groupadd -r docker && usermod -aG docker root
 
-# # Try building everything except problematic packages
-# RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && \
-#     source /root/catkin_ws/devel/setup.bash && \
-#     catkin_make"
-
 # Set up environment for running GUI applications
 ENV QT_X11_NO_MITSHM=1
 ENV DISPLAY=:0
@@ -194,14 +180,9 @@ RUN ./libuvc_installation.sh
 
 RUN apt-get install -y ros-${ROS_DISTRO}-realsense2-camera
 
-# # Install requirements.txt
-# COPY requirements.txt /tmp/requirements.txt
-# RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
-
 # Source the ROS environment by default
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /root/.bashrc
 RUN echo "source /root/catkin_ws/devel/setup.bash" >> /root/.bashrc
-
 
 # Set the default command
 CMD ["bash"]
