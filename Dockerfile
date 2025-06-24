@@ -130,7 +130,7 @@ RUN cd ${ROS_WS}/src && \
     git clone https://github.com/KlausLex/ARL_25_noetic_packages.git && \
     cd ARL_25_noetic_packages && \
     git submodule update --init --recursive && \
-    cd .. && \
+    cd ".. " && \
     cp -r ARL_25_noetic_packages/* . && \
     rm -rf ARL_25_noetic_packages
 
@@ -145,14 +145,17 @@ RUN cd ${ROS_WS}/src && \
     cp -r /tmp/shailjadav_ARL_25_noetic_packages/ar_track_alvar . && \
     rm -rf /tmp/shailjadav_ARL_25_noetic_packages
 
-# Explicitly remove the potentially problematic open_manipulator_controllers before replacing it
-RUN rm -rf ${ROS_WS}/src/open_manipulator_controllers
+# --- START OF MODIFICATION ---
+# Explicitly remove the potentially problematic open_manipulator_6dof_controls from the original clone
+# It's likely nested within the 'open_manipulator' submodule from KlausLex's repo.
+RUN rm -rf ${ROS_WS}/src/open_manipulator/open_manipulator_6dof_controls
 
-# Clone the known-working open_manipulator_controllers from shailjadav's repo
+# Clone the shailjadav repo and copy the specific package
 RUN cd ${ROS_WS}/src && \
-    git clone https://github.com/shailjadav/ARL_25_noetic_packages.git /tmp/shailjadav_ARL_25_noetic_packages_open_manipulator_controllers && \
-    cp -r /tmp/shailjadav_ARL_25_noetic_packages_open_manipulator_controllers/open_manipulator_controllers . && \
-    rm -rf /tmp/shailjadav_ARL_25_noetic_packages_open_manipulator_controllers
+    git clone https://github.com/shailjadav/ARL_25_noetic_packages.git /tmp/shailjadav_ARL_25_noetic_packages_for_6dof && \
+    cp -r /tmp/shailjadav_ARL_25_noetic_packages_for_6dof/open_manipulator_6dof_controls . && \
+    rm -rf /tmp/shailjadav_ARL_25_noetic_packages_for_6dof
+# --- END OF MODIFICATION ---
 
 # Add scripts and recording files
 RUN cd ${ROS_WS}/src && \
@@ -163,7 +166,7 @@ RUN cd ${ROS_WS}/src && \
 # Add YOLO and SAM2 models to the assignment 2 directory
 RUN cd ${ROS_WS}/src/my_scripts/assignment_2 && \
     curl -L -o yolo11m.pt https://github.com/ultralytics/assets/releases/download/v8.3.0/yolo11m.pt && \
-    curl -L -o yolo11n.pt https://github.com/ultralytics/assets/releases/download/v8.3.0/yolo11n.pt && \
+    curl -L -o yolo11n.pt https://github.com/ultralytics/assets/download/v8.3.0/yolo11n.pt && \
     curl -L -o yolov8n.pt https://github.com/ultralytics/assets/releases/download/v8.3.0/yolov8n.pt && \
     curl -L -o sam2.1_b.pt https://github.com/ultralytics/assets/releases/download/v8.3.0/sam2_t.pt && \
     curl -L -o sam2_b.pt https://github.com/ultralytics/assets/releases/download/v8.3.0/sam2_b.pt
