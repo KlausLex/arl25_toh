@@ -117,6 +117,7 @@ RUN apt-get update && apt-get install -y \
     ros-${ROS_DISTRO}-cv-bridge \
     ros-${ROS_DISTRO}-image-transport \
     ros-${ROS_DISTRO}-resource-retriever \
+    ros-${ROS_DISTRO}-control-msgs \
     && rm -rf /var/lib/apt/lists/*
 
 # Install dependencies for USB device access
