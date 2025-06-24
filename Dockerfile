@@ -130,7 +130,7 @@ RUN cd ${ROS_WS}/src && \
     git clone https://github.com/KlausLex/ARL_25_noetic_packages.git && \
     cd ARL_25_noetic_packages && \
     git submodule update --init --recursive && \
-    cd ".. " && \
+    cd .. && \
     cp -r ARL_25_noetic_packages/* . && \
     rm -rf ARL_25_noetic_packages
 
@@ -145,7 +145,6 @@ RUN cd ${ROS_WS}/src && \
     cp -r /tmp/shailjadav_ARL_25_noetic_packages/ar_track_alvar . && \
     rm -rf /tmp/shailjadav_ARL_25_noetic_packages
 
-# --- START OF MODIFICATION ---
 # Explicitly remove the potentially problematic open_manipulator_6dof_controls from the original clone
 # It's likely nested within the 'open_manipulator' submodule from KlausLex's repo.
 RUN rm -rf ${ROS_WS}/src/open_manipulator/open_manipulator_6dof_controls
@@ -155,7 +154,6 @@ RUN cd ${ROS_WS}/src && \
     git clone https://github.com/shailjadav/ARL_25_noetic_packages.git /tmp/shailjadav_ARL_25_noetic_packages_for_6dof && \
     cp -r /tmp/shailjadav_ARL_25_noetic_packages_for_6dof/open_manipulator_6dof_controls . && \
     rm -rf /tmp/shailjadav_ARL_25_noetic_packages_for_6dof
-# --- END OF MODIFICATION ---
 
 # Add scripts and recording files
 RUN cd ${ROS_WS}/src && \
@@ -178,12 +176,12 @@ WORKDIR ${ROS_WS}
 RUN apt-get update && \
     rosdep install --from-paths src --ignore-src -r -y
 
+# Build workspace
+RUN /bin/bash -c "set -e && source /opt/ros/noetic/setup.bash && catkin_make"
+
 # Install requirements.txt
 COPY requirements.txt /tmp/requirements.txt
 RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
-
-# Build workspace
-RUN /bin/bash -c "set -e && source /opt/ros/noetic/setup.bash && catkin_make"
 
 # Add user for accessing USB devices
 RUN groupadd -r docker && usermod -aG docker root
