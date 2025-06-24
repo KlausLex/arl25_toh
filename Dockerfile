@@ -126,7 +126,6 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Setup ROS workspace and clone ${ROS_DISTRO} packages
-# This clones KlausLex/ARL_25_noetic_packages.
 RUN cd ${ROS_WS}/src && \
     git clone https://github.com/KlausLex/ARL_25_noetic_packages.git && \
     cd ARL_25_noetic_packages && \
@@ -135,9 +134,12 @@ RUN cd ${ROS_WS}/src && \
     cp -r ARL_25_noetic_packages/* . && \
     rm -rf ARL_25_noetic_packages
 
+# Explicitly remove the ar_track_alvar directory that might have come from KlausLex's repo
+# This ensures a clean slate before copying the known-working version.
+RUN rm -rf ${ROS_WS}/src/ar_track_alvar
+
 # Clone the known-working ar_track_alvar from shailjadav's repo
-# This will overwrite any ar_track_alvar that came from KlausLex's repo if it exists,
-# ensuring the working version is used.
+# This will now ensure the working version is used by completely replacing any prior version.
 RUN cd ${ROS_WS}/src && \
     git clone https://github.com/shailjadav/ARL_25_noetic_packages.git /tmp/shailjadav_ARL_25_noetic_packages && \
     cp -r /tmp/shailjadav_ARL_25_noetic_packages/ar_track_alvar . && \
