@@ -165,4 +165,4 @@ dependencies:
       - idna==3.10
       - importlib-metadata==8.7.0
       - importlib-resources==6.5.2
-      - open-webui==latest
+      - open-webui==0.6.15
