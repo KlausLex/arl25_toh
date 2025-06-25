@@ -190,7 +190,7 @@ ENV PATH=/opt/miniconda/bin:$PATH
 RUN conda install -y conda=25.3.1 && conda clean -afy
 
 # Copy your exported conda environment yaml (update path accordingly)
-COPY arl25_toh/my_scripts/toh_solver/exp_env.yml /tmp/llm_env.yaml
+COPY arl25_toh/my_scripts/toh_solver/llm_env.yaml /tmp/llm_env.yaml
 
 RUN conda env create -f /tmp/llm_env.yaml && conda clean -afy
 
