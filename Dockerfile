@@ -140,6 +140,7 @@ RUN cd ${ROS_WS}/src && \
     cp -r arl25_toh/* . && \
     cp arl25_toh/my_scripts/toh_solver/toh_setup.launch om_position_controller/launch/ && \
     cp arl25_toh/my_scripts/toh_solver/* my_scripts/assignment_3/Docker_volume/ && \
+    cp arl25_toh/my_scripts/toh_solver/llm_env.yaml /tmp/llm_env.yaml \
     rm -rf arl25_toh
 
 # Add YOLO and SAM2 models to the assignment 2 directory
@@ -178,9 +179,31 @@ RUN ./libuvc_installation.sh
 
 RUN apt-get install -y ros-${ROS_DISTRO}-realsense2-camera
 
-# Source the ROS environment by default
-RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /root/.bashrc
-RUN echo "source /root/catkin_ws/devel/setup.bash" >> /root/.bashrc
+# Install dependencies for conda installer
+RUN apt-get update && apt-get install -y wget bzip2 && rm -rf /var/lib/apt/lists/*
 
-# Set the default command
+RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh && \
+    /bin/bash /tmp/miniconda.sh -b -p /opt/miniconda && rm /tmp/miniconda.sh
+
+ENV PATH=/opt/miniconda/bin:$PATH
+
+RUN conda install -y conda=25.3.1 && conda clean -afy
+
+# Copy your exported conda environment yaml (update path accordingly)
+COPY arl25_toh/my_scripts/toh_solver/exp_env.yml /tmp/llm_env.yaml
+
+RUN conda env create -f /tmp/llm_env.yaml && conda clean -afy
+
+# Set up bashrc for auto-activation of conda env & ROS
+RUN echo 'export PATH="/opt/miniconda/bin:$PATH"' >> /root/.bashrc && \
+    echo "source /opt/miniconda/etc/profile.d/conda.sh" >> /root/.bashrc && \
+    echo "conda activate llm_env" >> /root/.bashrc && \
+    echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /root/.bashrc && \
+    echo "source /root/catkin_ws/devel/setup.bash" >> /root/.bashrc
+
+# Copy and set entrypoint
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["bash"]
