@@ -4,10 +4,10 @@ set -e
 # Start Ollama (if not running externally)
 # Optional: `ollama serve &` if you're managing it yourself
 
-# Ensure model is pulled
+# Pull model if missing, using no-daemon mode
 if ! ollama list | grep -q "nomic-embed-text"; then
-  echo "Pulling Ollama model 'nomic-embed-text'..."
-  ollama pull nomic-embed-text
+  echo "[Entrypoint] Pulling Ollama model 'nomic-embed-text' (no-daemon)..."
+  OLLAMA_HOST=. ollama pull nomic-embed-text
 fi
 
 # Source ROS environment
