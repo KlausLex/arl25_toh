@@ -33,6 +33,8 @@ fi
 if ! ollama list | grep -q "nomic-embed-text"; then
   echo "[Entrypoint] Pulling Ollama model 'nomic-embed-text'..."
   ollama pull nomic-embed-text
+  echo "[Entrypoint] Pulling Ollama model 'gemma3:4b'..."
+  ollama pull gemma3:4b
 fi
 
 exec "$@"
