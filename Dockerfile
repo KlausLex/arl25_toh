@@ -90,12 +90,9 @@ RUN apt-get update && apt-get install -y \
     python3-rosinstall-generator \
     && rm -rf /var/lib/apt/lists/*
 
-# # Initialize rosdep
-# RUN rosdep init && \
-#     rosdep update --rosdistro ${ROS_DISTRO}
-
 # Initialize rosdep
-RUN rosdep update --rosdistro ${ROS_DISTRO}
+RUN rosdep init && \
+    rosdep update --rosdistro ${ROS_DISTRO}
     
 # Install Python tools and additional ROS packages
 RUN apt-get update && apt-get install -y \
