@@ -203,6 +203,10 @@ RUN echo "source /opt/miniconda/etc/profile.d/conda.sh" >> /root/.bashrc && \
     echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /root/.bashrc && \
     echo "source /root/catkin_ws/devel/setup.bash" >> /root/.bashrc
 
+# Install Ollama
+RUN curl -fsSL https://ollama.com/install.sh | sh && \
+    ln -s /root/.ollama/bin/ollama /usr/local/bin/ollama
+
 # Copy and set entrypoint
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
