@@ -168,6 +168,9 @@ RUN /bin/bash -c "set -e && source /opt/ros/noetic/setup.bash && catkin_make"
 # Fix ChromaDB protobuf crash before installing langchain
 RUN pip3 install --no-cache-dir protobuf==3.20.3
 
+# Fix chromadb/protobuf according to: https://github.com/chroma-core/chroma/issues/2571
+RUN pip install opentelemetry-exporter-otlp-proto-grpc==1.25.0
+
 # Install requirements.txt
 COPY requirements.txt /tmp/requirements.txt
 RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
