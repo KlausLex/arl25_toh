@@ -1,6 +1,15 @@
 #!/bin/bash
 set -e
 
+# Start Ollama (if not running externally)
+# Optional: `ollama serve &` if you're managing it yourself
+
+# Ensure model is pulled
+if ! ollama list | grep -q "nomic-embed-text"; then
+  echo "Pulling Ollama model 'nomic-embed-text'..."
+  ollama pull nomic-embed-text
+fi
+
 # Source ROS environment
 source /opt/ros/noetic/setup.bash
 
