@@ -171,11 +171,11 @@ dependencies:
       - jupyterlab-widgets
       - kiwisolver
       - kubernetes
-      - langchain
-      - langchain-community
-      - langchain-core
-      - langchain-ollama
-      - langchain-text-splitters
+      - langchain==0.3.24
+      - langchain-community==0.3.23
+      - langchain-core==0.3.60
+      - langchain-ollama==0.3.3
+      - langchain-text-splitters==0.3.8
       - langdetect
       - langfuse
       - langsmith
@@ -228,7 +228,7 @@ dependencies:
       - oauthlib
       - olefile
       - oletools
-      - ollama
+      - ollama==0.5.1
       - onnxruntime
       - open-webui
       - open3d
