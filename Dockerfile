@@ -165,6 +165,9 @@ RUN apt-get update && \
 # Build workspace
 RUN /bin/bash -c "set -e && source /opt/ros/noetic/setup.bash && catkin_make"
 
+# Fix ChromaDB protobuf crash before installing langchain
+RUN pip3 install --no-cache-dir protobuf==3.20.3
+
 # Install requirements.txt
 COPY requirements.txt /tmp/requirements.txt
 RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
