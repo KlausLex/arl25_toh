@@ -181,7 +181,7 @@ dependencies:
       - langsmith
       - lark
       - ldap3
-      - llvmlite
+      - llvmlite==0.44.0
       - loguru
       - lxml
       - mako
@@ -209,7 +209,7 @@ dependencies:
       - networkx
       - ninja
       - nltk
-      - numba
+      - numba==0.61.2
       - numpy==1.26.4
       - nvidia-cublas-cu12==12.6.4.1
       - nvidia-cuda-cupti-cu12==12.6.80
