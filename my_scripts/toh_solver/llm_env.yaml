@@ -51,10 +51,6 @@ dependencies:
       - attrs
       - authlib
       - av
-      - azure-ai-documentintelligence
-      - azure-core
-      - azure-identity
-      - azure-storage-blob
       - backoff
       - bcrypt
       - beautifulsoup4
@@ -97,7 +93,6 @@ dependencies:
       - docker
       - docutils
       - docx2txt
-      - duckduckgo-search
       - durationpy
       - easygui
       - ebcdic
@@ -230,7 +225,6 @@ dependencies:
       - oletools
       - ollama==0.5.1
       - onnxruntime
-      - open-webui
       - open3d
       - openai
       - opencv-python
