@@ -63,7 +63,7 @@ dependencies:
       - brotli
       - build
       - cachetools
-      - catkin-pkg
+      - catkin_pkg==0.5.2
       - certifi
       - cffi
       - chardet
@@ -86,7 +86,7 @@ dependencies:
       - dataclasses-json
       - datasets
       - decorator
-      - defusedxml
+      - defusedxml==0.6.0
       - dill
       - distro
       - dnspython
@@ -101,6 +101,7 @@ dependencies:
       - elastic-transport
       - elasticsearch
       - emoji
+      - empy==3.3.4
       - et-xmlfile
       - eval-type-backport
       - events
@@ -320,7 +321,7 @@ dependencies:
       - restrictedpython
       - retrying
       - rich
-      - rospkg
+      - rospkg==1.5.0
       - rpds-py
       - rsa
       - rtfde
