@@ -182,3 +182,8 @@ y-py==0.6.2
 ypy-websocket==0.8.4
 zipp==3.20.2
 zope.interface==4.7.1
+langchain
+langchain_community
+langchain_chroma
+langchain_ollama
+beautifulsoup5

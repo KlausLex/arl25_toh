@@ -257,7 +257,7 @@ dependencies:
       - prompt-toolkit
       - propcache
       - proto-plus
-      - protobuf
+      - protobuf>=3.19.0,<4.0.0
       - psutil
       - psycopg2-binary
       - ptyprocess
@@ -385,4 +385,5 @@ dependencies:
       - youtube-transcript-api
       - zipp
       - zstandard
+      - langchain-chroma
 prefix: /opt/conda/envs/llm_env

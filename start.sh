@@ -44,6 +44,7 @@ else
     -v $(pwd)/catkin_ws:/home/ros/catkin_ws \
     -v /dev:/dev \
     -v /tmp/.X11-unix:/tmp/.X11-unix \
+    -v $(pwd)/chroma_db:/persistent/chroma_db \
     --device-cgroup-rule="c 81:* rmw" \
     --device-cgroup-rule="c 189:* rmw" \
     --name $CONTAINER_NAME \

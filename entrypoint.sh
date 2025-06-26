@@ -1,15 +1,6 @@
 #!/bin/bash
 set -e
 
-# Start Ollama (if not running externally)
-# Optional: `ollama serve &` if you're managing it yourself
-
-# Pull model if missing, using no-daemon mode
-if ! ollama list | grep -q "nomic-embed-text"; then
-  echo "[Entrypoint] Pulling Ollama model 'nomic-embed-text' (no-daemon)..."
-  OLLAMA_HOST=. ollama pull nomic-embed-text
-fi
-
 # Source ROS environment
 source /opt/ros/noetic/setup.bash
 
@@ -30,5 +21,19 @@ fi
 if [ -f "$ROS_WS/devel/setup.bash" ]; then
     source "$ROS_WS/devel/setup.bash"
 fi
+
+# Start Ollama server if not running (only once)
+if ! pgrep -f "ollama serve" > /dev/null; then
+  echo "[Entrypoint] Starting Ollama server..."
+  nohup ollama serve > /tmp/ollama.log 2>&1 &
+  sleep 3
+fi
+
+# Pull the model if not present
+if ! ollama list | grep -q "nomic-embed-text"; then
+  echo "[Entrypoint] Pulling Ollama model 'nomic-embed-text'..."
+  ollama pull nomic-embed-text
+fi
+
 
 exec "$@"
