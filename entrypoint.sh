@@ -35,5 +35,4 @@ if ! ollama list | grep -q "nomic-embed-text"; then
   ollama pull nomic-embed-text
 fi
 
-
 exec "$@"

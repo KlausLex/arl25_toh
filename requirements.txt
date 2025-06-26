@@ -186,4 +186,4 @@ langchain
 langchain_community
 langchain_chroma
 langchain_ollama
-beautifulsoup5
+beautifulsoup4
