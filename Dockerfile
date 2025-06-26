@@ -9,9 +9,6 @@ ENV DEBIAN_FRONTEND=noninteractive \
     LC_ALL=C.UTF-8
 
 ENV ROS_WS /root/catkin_ws
-
-ENV CONDA_DEFAULT_ENV=llm_env
-
 RUN mkdir -p ${ROS_WS}/src 
 
 
@@ -197,6 +194,8 @@ ENV PATH=/opt/miniconda/bin:$PATH
 RUN conda install -y conda=25.3.1 && conda clean -afy
 
 RUN conda env create -f /tmp/llm_env.yaml && conda clean -afy
+
+ENV CONDA_DEFAULT_ENV=llm_env
 
 # Set up bashrc for auto-activation of conda env & ROS
 RUN echo "source /opt/miniconda/etc/profile.d/conda.sh" >> /root/.bashrc && \
