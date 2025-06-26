@@ -186,6 +186,7 @@ RUN apt-get install -y ros-${ROS_DISTRO}-realsense2-camera
 # Install dependencies for conda installer
 RUN apt-get update && apt-get install -y wget bzip2 && rm -rf /var/lib/apt/lists/*
 
+# Setup miniconda
 RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh && \
     /bin/bash /tmp/miniconda.sh -b -p /opt/miniconda && rm /tmp/miniconda.sh
 
