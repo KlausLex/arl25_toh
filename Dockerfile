@@ -208,7 +208,11 @@ ENV CONDA_DEFAULT_ENV=llm_env
 RUN echo "source /opt/miniconda/etc/profile.d/conda.sh" >> /root/.bashrc && \
     echo "conda activate llm_env" >> /root/.bashrc && \
     echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /root/.bashrc && \
-    echo "source /root/catkin_ws/devel/setup.bash" >> /root/.bashrc
+    echo "source /root/catkin_ws/devel/setup.bash" >> /root/.bashrc && \
+    echo "export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python" >> /root/.bashrc
+
+# Fix for protobuf / chromadb?
+ENV PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
 
 # Install Ollama
 RUN curl -fsSL https://ollama.com/install.sh | sh

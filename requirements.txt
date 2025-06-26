@@ -187,3 +187,4 @@ langchain
 langchain_community
 langchain_chroma
 langchain_ollama
+protobuf==3.20.*

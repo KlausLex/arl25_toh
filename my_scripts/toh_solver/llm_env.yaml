@@ -260,7 +260,6 @@ dependencies:
       - prompt-toolkit
       - propcache
       - proto-plus
-      - protobuf==3.20.3
       - psutil
       - psycopg2-binary
       - ptyprocess
@@ -389,4 +388,5 @@ dependencies:
       - zipp
       - zstandard
       - langchain-chroma
+      - protobuf==3.20.*
 prefix: /opt/conda/envs/llm_env

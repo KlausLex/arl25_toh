@@ -1066,6 +1066,9 @@ if __name__ == "__main__":
 
     # ----------------------------------Initialize the RAG System----------------------------------#
     chain = initialise_rag_system()
+    if chain is None:
+        print("RAG system failed. Ensure protobuf is pinned to 3.20.3 in your Conda env.")
+        sys.exit(1)
     goal_state = {'C': ['green_cube', 'red_cube', 'blue_cube'], 'A': [], 'B': []}  # Goal state for Tower of Hanoi with 3 cubes
 
     # Peg positions 
