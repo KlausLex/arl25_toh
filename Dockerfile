@@ -9,7 +9,12 @@ ENV DEBIAN_FRONTEND=noninteractive \
     LC_ALL=C.UTF-8
 
 ENV ROS_WS /root/catkin_ws
+
+ENV CONDA_DEFAULT_ENV=llm_env
+
 RUN mkdir -p ${ROS_WS}/src 
+
+
 
 # Update the package list and install essential packages
 RUN apt-get update && apt-get install -y \
@@ -62,7 +67,9 @@ ENV NVIDIA_DRIVER_CAPABILITIES ${NVIDIA_DRIVER_CAPABILITIES:+$NVIDIA_DRIVER_CAPA
 # Setup ROS Install
 RUN apt-get update && apt-get install -y && \
     curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add - && \
-    echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list \
+    echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list
+
+RUN apt-get update && apt-get install -y \
     python3-osrf-pycommon \
     python3-catkin-tools \
     && rm -rf /var/lib/apt/lists/*
@@ -83,9 +90,12 @@ RUN apt-get update && apt-get install -y \
     python3-rosinstall-generator \
     && rm -rf /var/lib/apt/lists/*
 
+# # Initialize rosdep
+# RUN rosdep init && \
+#     rosdep update --rosdistro ${ROS_DISTRO}
+
 # Initialize rosdep
-RUN rosdep init && \
-    rosdep update --rosdistro ${ROS_DISTRO}
+RUN rosdep update --rosdistro ${ROS_DISTRO}
     
 # Install Python tools and additional ROS packages
 RUN apt-get update && apt-get install -y \
@@ -189,14 +199,10 @@ ENV PATH=/opt/miniconda/bin:$PATH
 
 RUN conda install -y conda=25.3.1 && conda clean -afy
 
-# Copy your exported conda environment yaml (update path accordingly)
-COPY my_scripts/toh_solver/llm_env.yaml /tmp/llm_env.yaml
-
 RUN conda env create -f /tmp/llm_env.yaml && conda clean -afy
 
 # Set up bashrc for auto-activation of conda env & ROS
-RUN echo 'export PATH="/opt/miniconda/bin:$PATH"' >> /root/.bashrc && \
-    echo "source /opt/miniconda/etc/profile.d/conda.sh" >> /root/.bashrc && \
+RUN echo "source /opt/miniconda/etc/profile.d/conda.sh" >> /root/.bashrc && \
     echo "conda activate llm_env" >> /root/.bashrc && \
     echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /root/.bashrc && \
     echo "source /root/catkin_ws/devel/setup.bash" >> /root/.bashrc

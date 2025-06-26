@@ -4,15 +4,16 @@ set -e
 # Source ROS environment
 source /opt/ros/noetic/setup.bash
 
-# Setup conda
+# Setup Conda (correct path)
 export PATH="/opt/miniconda/bin:$PATH"
-echo 'export PATH="/opt/conda/bin:$PATH"' >> ~/.bashrc
-source ~/.bashrc
-source /opt/conda/etc/profile.d/conda.sh
+source /opt/miniconda/etc/profile.d/conda.sh
 conda activate llm_env
-source devel/setup.bash
 
-# Source workspace environment if exists
+# Source local workspace (if present)
+if [ -f "devel/setup.bash" ]; then
+    source devel/setup.bash
+fi
+
 if [ -f "$ROS_WS/devel/setup.bash" ]; then
     source "$ROS_WS/devel/setup.bash"
 fi
