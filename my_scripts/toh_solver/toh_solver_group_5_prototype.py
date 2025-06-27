@@ -892,9 +892,9 @@ def get_peg_height(peg_name, current_state):
         Height of the peg.
     """
     peg_heights = {
-        "A": 0.05,
-        "B": 0.05,
-        "C": 0.05
+        "A": 0.06,
+        "B": 0.06,
+        "C": 0.06
     }
     for peg in current_state.keys():
         peg_heights[peg] += 0.02 * len(current_state[peg])
@@ -1128,7 +1128,7 @@ if __name__ == "__main__":
     }
 
     for current_move in moveset:
-        pick_offset = [0.0, 0.0, 0.03]  # Slight offset above cube for picking
+        pick_offset = [0.0, 0.0, 0.1]  # Slight offset above cube for picking
         place_offset = [0.0, 0.0, 0.01]  # Slight offset above peg for placing
         current_state = get_cubes_peg_position(peg_positions)
 
