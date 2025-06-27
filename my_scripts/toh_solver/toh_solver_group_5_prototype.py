@@ -1128,7 +1128,7 @@ if __name__ == "__main__":
     }
 
     for current_move in moveset:
-        pick_offset = [0.0, 0.0, 0.02]  # Slight offset above cube for picking
+        pick_offset = [0.0, 0.0, 0.03]  # Slight offset above cube for picking
         place_offset = [0.0, 0.0, 0.01]  # Slight offset above peg for placing
         current_state = get_cubes_peg_position(peg_positions)
 
